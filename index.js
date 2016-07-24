@@ -110,6 +110,7 @@ module.exports = function (gulp, options) {
     console.log('  gulp [TASK] [OPTIONS...]');
     console.log('');
     console.log(chalk.underline('Available tasks'));
+    var guideChar = ".";
     Object.keys(gulp.tasks).sort().forEach(function (name) {
       if (gulp.tasks[name].help || showAllTasks) {
         var help = gulp.tasks[name].help || {message: '', options: {}};
@@ -119,10 +120,14 @@ module.exports = function (gulp, options) {
         }
         var args = [' ', chalk.cyan(name)];
 
-        args.push(new Array(margin - name.length + 1 + optionsBuffer.length).join(' '));
 
+        var namePadding = new Array(margin - name.length + 1 + optionsBuffer.length);
         if (help.message) {
+          args.push(chalk.dim(namePadding.join(guideChar)));
+          guideChar = guideChar === '.' ? '-' : '.';
           args.push(help.message.replace(/\n/g, '\n    ' + new Array(margin + 1 + optionsBuffer.length).join(' ')));
+        } else {
+          args.push(namePadding.join(' '));
         }
 
         if (help.aliases) {
